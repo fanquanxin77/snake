@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>贪吃蛇游戏</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            touch-action: none; /* 防止页面滚动 */
+        }
+        canvas {
+            border: 2px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 100vmin; /* 适应屏幕大小 */
+            max-height: 100vmin;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="800"></canvas>
+    <script src="snake.js"></script>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const game = new SnakeGame(canvas);
+        
+        function gameLoop() {
+            game.update();
+            game.draw();
+            setTimeout(gameLoop, 200);
+        }
+        
+        gameLoop();
+    </script>
+</body>
+</html> 
