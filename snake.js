@@ -120,6 +120,29 @@ class SnakeGame {
   }
 
   /**
+   * 检查碰撞
+   * @param {{x: number, y: number}} head - 蛇头位置
+   * @returns {boolean} 是否发生碰撞
+   */
+  checkCollision(head) {
+    // 如果超出边界，从另一边出现
+    if (head.x < 0) {
+        head.x = Math.floor(this.canvas.width / this.gridSize) - 1;
+    } else if (head.x >= this.canvas.width / this.gridSize) {
+        head.x = 0;
+    }
+    
+    if (head.y < 0) {
+        head.y = Math.floor(this.canvas.height / this.gridSize) - 1;
+    } else if (head.y >= this.canvas.height / this.gridSize) {
+        head.y = 0;
+    }
+    
+    // 移除自身碰撞检测
+    return false;
+  }
+
+  /**
    * 更新游戏状态
    */
   update() {
@@ -133,44 +156,25 @@ class SnakeGame {
 
     // 根据方向移动蛇头
     switch(this.direction) {
-      case 'up': head.y--; break;
-      case 'down': head.y++; break;
-      case 'left': head.x--; break;
-      case 'right': head.x++; break;
+        case 'up': head.y--; break;
+        case 'down': head.y++; break;
+        case 'left': head.x--; break;
+        case 'right': head.x++; break;
     }
 
-    // 检查碰撞
-    if (this.checkCollision(head)) {
-      this.gameOver = true;
-      return;
-    }
+    // 检查并处理边界
+    this.checkCollision(head);
 
     // 添加新的蛇头
     this.snake.unshift(head);
 
     // 检查是否吃到食物
     if (head.x === this.food.x && head.y === this.food.y) {
-      this.score += 10;
-      this.food = this.generateFood();
+        this.score += 10;
+        this.food = this.generateFood();
     } else {
-      this.snake.pop();
+        this.snake.pop();
     }
-  }
-
-  /**
-   * 检查碰撞
-   * @param {{x: number, y: number}} head - 蛇头位置
-   * @returns {boolean} 是否发生碰撞
-   */
-  checkCollision(head) {
-    // 检查墙壁碰撞
-    if (head.x < 0 || head.x >= this.canvas.width / this.gridSize ||
-        head.y < 0 || head.y >= this.canvas.height / this.gridSize) {
-      return true;
-    }
-
-    // 检查自身碰撞
-    return this.snake.some(segment => segment.x === head.x && segment.y === head.y);
   }
 
   /**
